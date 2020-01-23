@@ -1,0 +1,4 @@
+R5T.Stockholm.Tiros.Standard - The standard aggregation library of a ITextSerializer<T>-based implementation of the IStreamSerializer<T> service for the Stockholm project.
+
+Goals
+
