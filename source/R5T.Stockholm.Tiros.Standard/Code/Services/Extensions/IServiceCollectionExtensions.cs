@@ -13,7 +13,11 @@ namespace R5T.Stockholm.Tiros.Standard
         {
             services
                 .AddSingleton<IStreamSerializer<T>, TextStreamSerializer<T>>()
-                .AddSingleton<IStreamSerializerOptions<T>, DefaultStreamOperatorOptions<T>>()
+                .AddSingleton<StreamSerializerOptions<T>>()
+                .Configure<StreamSerializerOptions<T>>(options =>
+                {
+                    options.AddByteOrderMark = StreamSerializerOptions.DefaultAddByteOrderMark;
+                })
                 ;
 
             return services;
