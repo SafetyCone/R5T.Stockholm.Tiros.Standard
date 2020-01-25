@@ -1,6 +1,7 @@
 ﻿using System;
 
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 
 using R5T.Stockholm.Default;
 
@@ -13,7 +14,6 @@ namespace R5T.Stockholm.Tiros.Standard
         {
             services
                 .AddSingleton<IStreamSerializer<T>, TextStreamSerializer<T>>()
-                .AddSingleton<StreamSerializerOptions<T>>()
                 .Configure<StreamSerializerOptions<T>>(options =>
                 {
                     options.AddByteOrderMark = StreamSerializerOptions.DefaultAddByteOrderMark;
