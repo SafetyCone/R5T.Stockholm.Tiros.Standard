@@ -1,19 +1,26 @@
 ﻿using System;
 
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 
+using R5T.Dacia;
 using R5T.Stockholm.Default;
+using R5T.Tiros;
 
 
 namespace R5T.Stockholm.Tiros.Standard
 {
     public static class IServiceCollectionExtensions
     {
-        public static IServiceCollection AddTextStreamSerializer<T>(this IServiceCollection services)
+        /// <summary>
+        /// Adds the <see cref="IStreamSerializer{T}"/> service.
+        /// </summary>
+        public static IServiceCollection AddTextStreamSerializer<T>(this IServiceCollection services,
+            ServiceAction<ITextSerializer<T>> addTextSerializer)
         {
             services
-                .AddSingleton<IStreamSerializer<T>, TextStreamSerializer<T>>()
+                .AddTirosTextStreamSerializer<T>(
+                    addTextSerializer,
+                    ServiceAction.AddedElsewhere)
                 .Configure<StreamSerializerOptions<T>>(options =>
                 {
                     options.AddByteOrderMark = StreamSerializerOptions.DefaultAddByteOrderMark;
@@ -21,6 +28,17 @@ namespace R5T.Stockholm.Tiros.Standard
                 ;
 
             return services;
+        }
+
+        /// <summary>
+        /// Adds the <see cref="IStreamSerializer{T}"/> service.
+        /// </summary>
+        public static ServiceAction<IStreamSerializer<T>> AddTextStreamSerializerAction<T>(this IServiceCollection services,
+            ServiceAction<ITextSerializer<T>> addTextSerializer)
+        {
+            var serviceAction = new ServiceAction<IStreamSerializer<T>>(() => services.AddTextStreamSerializer<T>(
+                addTextSerializer));
+            return serviceAction;
         }
     }
 }
